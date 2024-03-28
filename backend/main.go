@@ -1,8 +1,8 @@
 package main
 
 import (
-    "html/template"
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
@@ -11,9 +11,14 @@ type TodoHandler struct {
 }
 
 func main() {
+    todoHandler := TodoHandler {
+        todoItems: []TodoItem{},
+    };
+
     mux := http.NewServeMux();
     mux.HandleFunc("/", serveFile);
-    mux.HandleFunc("/api/getTodoTasks", getTodoTasks);
+    mux.HandleFunc("/api/getTodoTasks", todoHandler.getTodoTasks);
+    mux.HandleFunc("/api/newTodoTask", todoHandler.newTodoTask);
     err := http.ListenAndServe(":6969", mux);
 
     if err != nil {
@@ -40,25 +45,20 @@ type TodoItem struct {
     TaskName string;
 }
 const TODO_ITEM_TEMPLATE = "templates/todo_item.html"
-func getTodoTasks(w http.ResponseWriter, req *http.Request) {
+func (handle *TodoHandler) getTodoTasks(w http.ResponseWriter, req *http.Request) {
     tmpl, err := template.ParseFiles(TODO_ITEM_TEMPLATE);
 
-    todoItem1 := TodoItem {
-        TaskName: "Test Task",
-    };
-
-    todoItem2 := TodoItem {
-        TaskName: "Test Task2",
-    };
-
-    items := []TodoItem {
-        todoItem1,
-        todoItem2,
-    }
     if err != nil {
         fmt.Printf("Error while parsing html template: %s", err.Error());
     }
-
-    tmpl.Execute(w, items)
+    tmpl.Execute(w, handle.todoItems)
 }
 
+func (handle *TodoHandler) newTodoTask(w http.ResponseWriter, req *http.Request) {
+    todoItem := TodoItem {
+        TaskName: req.FormValue("taskName"),
+    }
+
+    handle.todoItems = append(handle.todoItems, todoItem);
+    w.WriteHeader(http.StatusOK)
+}

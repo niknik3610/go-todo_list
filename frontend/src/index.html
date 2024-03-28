@@ -10,10 +10,16 @@
             <p style="align-self: center;">Create a New Todo:</p>
             <div class="new-todo-input">
                 <p style="text-align: center;">Todo Item Name:</p>
-                <input type="text" />
+                <div class="new-todo-text-box">
+                    <form hx-post="/api/newTodoTask" hx-swap="none">
+                        <input type="text" name="taskName"/>
+                        <button style="margin-left: 7px">Submit</button>
+                    </form>
+                </div>
             </div>
         </div>
         <div hx-get="/api/getTodoTasks" hx-trigger="every 1s"><div>
     </body>
 </html> 
+
 

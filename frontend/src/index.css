@@ -12,3 +12,8 @@
 .centered-text {
     text-align: center;
 }
+
+.new-todo-text-box {
+    display: flex;
+    flex-direction: row;
+}
