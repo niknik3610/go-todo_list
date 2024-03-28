@@ -1,0 +1,14 @@
+.new-todo-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.new-todo-input {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.centered-text {
+    text-align: center;
+}

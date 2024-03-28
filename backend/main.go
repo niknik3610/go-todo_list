@@ -1,16 +1,19 @@
 package main
 
 import (
+    "html/template"
 	"fmt"
-	// "io"
 	"net/http"
-	// "os"
 )
+
+type TodoHandler struct {
+    todoItems []TodoItem;
+}
 
 func main() {
     mux := http.NewServeMux();
     mux.HandleFunc("/", serveFile);
-    mux.HandleFunc("/api/hello", hello);
+    mux.HandleFunc("/api/getTodoTasks", getTodoTasks);
     err := http.ListenAndServe(":6969", mux);
 
     if err != nil {
@@ -20,7 +23,7 @@ func main() {
 }
 
 const FRONTEND_ROOT  = "../frontend";
-const INDEX_HTML_PATH = "/src/index.html";
+const INDEX_HTML_PATH = "src/index.html";
 
 func serveFile(w http.ResponseWriter, req *http.Request) {
     path := FRONTEND_ROOT + req.URL.Path;
@@ -33,6 +36,29 @@ func serveFile(w http.ResponseWriter, req *http.Request) {
     http.ServeFile(w, req, path);
 }
 
-func hello(w http.ResponseWriter, req *http.Request) {
-    fmt.Println("Hello");
+type TodoItem struct {
+    TaskName string;
 }
+const TODO_ITEM_TEMPLATE = "templates/todo_item.html"
+func getTodoTasks(w http.ResponseWriter, req *http.Request) {
+    tmpl, err := template.ParseFiles(TODO_ITEM_TEMPLATE);
+
+    todoItem1 := TodoItem {
+        TaskName: "Test Task",
+    };
+
+    todoItem2 := TodoItem {
+        TaskName: "Test Task2",
+    };
+
+    items := []TodoItem {
+        todoItem1,
+        todoItem2,
+    }
+    if err != nil {
+        fmt.Printf("Error while parsing html template: %s", err.Error());
+    }
+
+    tmpl.Execute(w, items)
+}
+

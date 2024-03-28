@@ -2,10 +2,18 @@
 <html>
     <head>
         <script src="/deps/htmx/htmx.min.js"></script>
+        <link rel="stylesheet" href="/src/index.css">
     </head
     <body>
-        <h1>My First Heading</h1>
-        <p>My first paragraph.</p>
-        <button hx-get="/api/hello">Say Hello</button>
+        <h1>Todo List:</h1>
+        <div class="new-todo-box">
+            <p style="align-self: center;">Create a New Todo:</p>
+            <div class="new-todo-input">
+                <p style="text-align: center;">Todo Item Name:</p>
+                <input type="text" />
+            </div>
+        </div>
+        <div hx-get="/api/getTodoTasks" hx-trigger="every 1s"><div>
     </body>
 </html> 
+
