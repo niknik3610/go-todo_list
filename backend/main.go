@@ -3,22 +3,27 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
 )
 
 type TodoHandler struct {
-    todoItems []TodoItem;
+    todoItems map[string]TodoItem;
+    finishedTodoItems map[string]TodoItem;
 }
 
 func main() {
     todoHandler := TodoHandler {
-        todoItems: []TodoItem{},
+        todoItems: make(map[string]TodoItem),
+        finishedTodoItems: make(map[string]TodoItem),
     };
 
     mux := http.NewServeMux();
     mux.HandleFunc("/", serveFile);
     mux.HandleFunc("/api/getTodoTasks", todoHandler.getTodoTasks);
     mux.HandleFunc("/api/newTodoTask", todoHandler.newTodoTask);
+    mux.HandleFunc("/api/finishTodoTask", todoHandler.finishTodoTask);
+    mux.HandleFunc("/api/getFinishedTodoTasks", todoHandler.getFinishedTodoTasks);
     err := http.ListenAndServe(":6969", mux);
 
     if err != nil {
@@ -51,7 +56,17 @@ func (handle *TodoHandler) getTodoTasks(w http.ResponseWriter, req *http.Request
     if err != nil {
         fmt.Printf("Error while parsing html template: %s", err.Error());
     }
-    tmpl.Execute(w, handle.todoItems)
+    tmpl.Execute(w, handle.todoItems);
+}
+
+const FINISHED_TODO_ITEM_TEMPLATE = "templates/finished_todo_item.html"
+func (handle *TodoHandler) getFinishedTodoTasks(w http.ResponseWriter, req *http.Request) {
+    tmpl, err := template.ParseFiles(FINISHED_TODO_ITEM_TEMPLATE);
+
+    if err != nil {
+        fmt.Printf("Error while parsing html template: %s", err.Error());
+    }
+    tmpl.Execute(w, handle.finishedTodoItems);
 }
 
 func (handle *TodoHandler) newTodoTask(w http.ResponseWriter, req *http.Request) {
@@ -59,6 +74,20 @@ func (handle *TodoHandler) newTodoTask(w http.ResponseWriter, req *http.Request)
         TaskName: req.FormValue("taskName"),
     }
 
-    handle.todoItems = append(handle.todoItems, todoItem);
+    handle.todoItems[todoItem.TaskName] = todoItem;
     w.WriteHeader(http.StatusOK)
+}
+
+func (handle *TodoHandler) finishTodoTask(w http.ResponseWriter, req *http.Request) {
+    itemName :=  req.FormValue("taskName");
+    item, ok := handle.todoItems[itemName];
+    if ok == false {
+        w.WriteHeader(http.StatusBadRequest);
+        io.WriteString(w, "Todo Item not Found");
+        return;
+    }
+
+    delete(handle.todoItems, itemName);
+    handle.finishedTodoItems[itemName] = item;
+    w.WriteHeader(http.StatusOK);
 }

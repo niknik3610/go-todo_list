@@ -1,6 +1,8 @@
 {{range .}}
 <div>
-    <p>{{.TaskName}}</p>
-    <button>Finish Task</button>
+    <form hx-post="/api/finishTodoTask" hx-swap="none" hx-vals="{&#34taskName&#34: &#34{{.TaskName}}&#34}">
+        <p>{{.TaskName}}</p>
+        <button>Finish Task</button>
+    </form>
 </div>
 {{end}}
