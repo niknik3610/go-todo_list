@@ -5,22 +5,27 @@
         <link rel="stylesheet" href="/src/index.css">
     </head
     <body>
-        <h1>Todo List:</h1>
-        <div class="new-todo-box">
-            <p style="align-self: center;">Create a New Todo:</p>
-            <div class="new-todo-input">
-                <p style="text-align: center;">Todo Item Name:</p>
-                <div class="new-todo-text-box">
-                    <form hx-post="/api/newTodoTask" hx-swap="none">
-                        <input type="text" name="taskName"/>
-                        <button style="margin-left: 7px">Submit</button>
-                    </form>
+        <div class="page-container">
+            <h1>To-Do List:</h1>
+            <div class="new-todo-box">
+                <p class="centered-text new-todo-text" style="font-weight: bold;">Create a New Todo:</p>
+                <div class="new-todo-input">
+                    <p class="">Item Name:</p>
+                    <div class="new-todo-text-box">
+                        <form hx-post="/api/newTodoTask" hx-swap="none">
+                            <input type="text" name="taskName"/>
+                            <button style="margin-left: 7px">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
+            <div class="tasks">
+                <h2 class="centered-text">Tasks</h2>
+                <div hx-get="/api/getTodoTasks" hx-trigger="every 1s"></div>
+                <h2 class="centered-text">Finished Tasks</h2>
+                <div hx-get="/api/getFinishedTodoTasks" hx-trigger="every 1s"></div>
+            </div>
         </div>
-        <div hx-get="/api/getTodoTasks" hx-trigger="every 1s"></div>
-        <h2>Finished Tasks</h4>
-        <div hx-get="/api/getFinishedTodoTasks" hx-trigger="every 1s"></div>
     </body>
 </html> 
 

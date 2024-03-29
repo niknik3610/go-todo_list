@@ -1,19 +1,72 @@
 .new-todo-box {
     display: flex;
     flex-direction: row;
+
+    .new-todo-input {
+        display: flex;
+        flex-direction: column;
+        justify-items: start;
+        padding: 0 0 30px 0;
+        font-size: medium;
+    }
+    .new-todo-text {
+        padding: 20px 30px 0 0;
+        justify-self: center;
+        align-self: center;
+    }
+
+    .new-todo-text-box {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
-.new-todo-input {
+.tasks {
+    border-top: solid;
+    margin-top: 25px;
+    padding-top: 20px;
+    width: 50%;
     display: flex;
     flex-direction: column;
-    padding-left: 20px;
+    align-items: center;
+
+    .todo-item {
+        border-style: dashed;
+        height: 100px;
+        width: 150px;
+        border-radius: 20px;
+        border-width: 2px;
+    }
+
+    .todo-item-form {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    .todo-item-finish-button {
+        height: 40px;
+        width: 75px;
+    }
 }
 
 .centered-text {
     text-align: center;
 }
 
-.new-todo-text-box {
+.page-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+body {
+    background-color: #5b00a6;
+    color: white;
+    font-size: larger;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }

@@ -1,8 +1,8 @@
 {{range .}}
-<div>
-    <form hx-post="/api/finishTodoTask" hx-swap="none" hx-vals="{&#34taskName&#34: &#34{{.TaskName}}&#34}">
-        <p>{{.TaskName}}</p>
-        <button>Finish Task</button>
+<div class="todo-item">
+    <form class="todo-item-form" hx-post="/api/finishTodoTask" hx-swap="none" hx-vals="{&#34taskName&#34: &#34{{.TaskName}}&#34}">
+        <p class="centered-text">{{.TaskName}}</p>
+        <button class="todo-item-finish-button">Finish Task</button>
     </form>
 </div>
 {{end}}
